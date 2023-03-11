@@ -1,0 +1,3 @@
+[submodule "opclave-scaling2023_op-geth"]
+	path = opclave-scaling2023_op-geth
+	url = https://github.com/itublockchain/opclave-scaling2023_op-geth.git
