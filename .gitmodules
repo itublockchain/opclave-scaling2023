@@ -1,3 +1,8 @@
 [submodule "opclave-scaling2023_op-geth"]
 	path = opclave-scaling2023_op-geth
 	url = https://github.com/itublockchain/opclave-scaling2023_op-geth.git
+[submodule "bio-account/lib/forge-std"]
+	path = bio-account/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "lib/forge-std"]
+	branch = v1.5.1
