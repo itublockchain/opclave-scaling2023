@@ -104,18 +104,18 @@ async function testEnclave() {
 
   const tag = 'com.blockchain.itu.enclave.test';
 
-  try {
-    // Try to get the keypair
-    await enclave.getPublicKey(tag);
-  } catch {
-    // Keypair not found, generate a new one
-    await enclave.generateKeyPair(tag);
-  }
+  // try {
+  //   // Try to get the keypair
+  //   await enclave.getPublicKey(tag);
+  // } catch {
+  //   // Keypair not found, generate a new one
+  //   await enclave.generateKeyPair(tag);
+  // }
 
   const signature = await enclave.signMessage(encodedTxData, tag);
 
   console.log('encoded tx:', encodedTxData);
-  console.log('public key:', await enclave.getPublicKey(tag));
+  // console.log('public key:', await enclave.getPublicKey(tag));
   console.log('signature:', signature);
 }
 

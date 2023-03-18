@@ -109,11 +109,11 @@ class EnclaveModule: NSObject {
     rejecter reject: RCTPromiseRejectBlock
   ) -> Void {
     print("[EnclaveModule] generateKeyPair called")
-    let flags: SecAccessControlCreateFlags = .userPresence;
+    let flags: SecAccessControlCreateFlags = .biometryAny;
     
     let access = SecAccessControlCreateWithFlags(
       kCFAllocatorDefault,
-      kSecAttrAccessibleWhenUnlocked,
+      kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
       flags,
       nil
     )!
