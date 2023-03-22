@@ -16,7 +16,7 @@ docker build -t opclave .
 
 ```bash
 # On M1/M2 proccessors
-docker run --platform linux/x86_64 -it --rm opclave bash
+docker run --name opclave --platform linux/x86_64 -p 8545:8545 -it opclave bash
 
 # Linux
 docker run -it --rm opclave bash
