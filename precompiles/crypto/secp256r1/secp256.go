@@ -7,7 +7,7 @@ import (
 
 func VerifySignature(pubKeyByte, dataHashByte, signatureByte []byte) bool {
 	pubKey := newPubKey(pubKeyByte)
-	if pubKey == nil {
+	if pubKey.X == nil || pubKey.Y == nil {
 		return false
 	}
 
