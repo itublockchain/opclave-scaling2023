@@ -31,5 +31,5 @@ func (c *ecverify) Run(input []byte) ([]byte, error) {
 	signature = common.TrimLeftZeroes(signature)
 
 	// custom signature verification for secp256r1
-	return crypto.VerifySignatureR1(pubKey, dataHash, signature), nil
+	return common.LeftPadBytes(crypto.VerifySignatureR1(pubKey, dataHash, signature), 32), nil
 }

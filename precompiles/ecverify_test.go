@@ -40,10 +40,11 @@ func init() {
 }
 
 func TestRunEcverify(t *testing.T) {
+	one := common.LeftPadBytes([]byte{1}, 32)
 	ecv := &ecverify{}
 	ok, _ := ecv.Run(input)
-	assert.Equal(t, []byte{1}, ok)
+	assert.Equal(t, one, ok)
 
 	ok, _ = ecv.Run(inputx)
-	assert.Equal(t, []byte{1}, ok)
+	assert.Equal(t, one, ok)
 }
