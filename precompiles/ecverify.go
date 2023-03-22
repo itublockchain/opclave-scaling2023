@@ -23,9 +23,9 @@ func (c *ecverify) Run(input []byte) ([]byte, error) {
 	dataHash := make([]byte, 32)
 	signature := make([]byte, 72)
 
-	copy(pubKey, input[0:34])
-	copy(dataHash, input[34:66])
-	copy(signature, input[66:138])
+	copy(pubKey, input[0:33])
+	copy(dataHash, input[33:65])
+	copy(signature, input[65:137])
 
 	// signature size can vary from 70 to 72 bytes, so we are left-trimming
 	signature = common.TrimLeftZeroes(signature)
