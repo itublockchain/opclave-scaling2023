@@ -14,7 +14,7 @@ import FaceIdLogo from '../assets/faceid-logo.png';
 
 import {Colors, Fonts} from './style';
 import {getAccount, setAccount} from '../chain/accountStore';
-import {UserOperation} from '../lib';
+import {Enclave, UserOperation} from '../lib';
 import axios from 'axios';
 
 const LandingState = {
@@ -58,6 +58,9 @@ async function onLandingPress(
 
     // console.log(bundlerResponse);
     // await setAccount(deployOp.sender);
+    
+    // Trigger the enclave
+    await Enclave.getPublicKey();
 
     // Sleep 1 second
     await new Promise(resolve => setTimeout(resolve, 1000));

@@ -10,6 +10,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Linking,
+  Keyboard,
 } from 'react-native';
 import {SelectList} from 'react-native-dropdown-select-list';
 
@@ -23,7 +24,7 @@ import FailedIcon from '../assets/failed.png';
 import FollowLinkIcon from '../assets/follow-link-white.png';
 
 import {Colors, Fonts} from './style';
-import {deployments, Token, tokens} from '../chain';
+import {deployments, tokens} from '../chain';
 import {AppContext} from '../context/AppContext';
 
 const ESTIMATE_FEE = 0.0000194;
@@ -180,7 +181,7 @@ const PrepareTransfer = (props: {
   // These are for the convenience in the demo, otherwise we'd have to wait for balanceOf calls
   const {dummyData, setDummyData} = useContext(AppContext);
 
-  const [amount, setAmount] = useState('100');
+  const [amount, setAmount] = useState('1');
   const [address, setAddress] = useState(
     '0x81841c4648E17Db0F4Dc7e47195D19B19BA47a66',
   );
@@ -323,6 +324,7 @@ const PrepareTransfer = (props: {
             justifyContent: 'space-between',
           }}>
           <TextInput
+            onBlur={Keyboard.dismiss}
             style={styles.input}
             onChangeText={setAddress}
             value={String(address)}
@@ -343,15 +345,10 @@ const PrepareTransfer = (props: {
             justifyContent: 'space-between',
           }}>
           <TextInput
+            onBlur={Keyboard.dismiss}
             style={styles.input}
             onChangeText={e => {
-              if (e.endsWith('.') || e.endsWith('0')) {
-                return setAmount(e);
-              } else if (isNaN(parseFloat(e)) || e.length === 0) {
-                return setAmount('0');
-              } else {
-                setAmount(parseFloat(e).toString());
-              }
+              setAmount(parseFloat(e).toString());
             }}
             value={amount}
             placeholder="Amount"
