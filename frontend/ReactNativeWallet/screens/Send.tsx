@@ -8,15 +8,22 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  StyleSheet,
 } from 'react-native';
 import {SelectList} from 'react-native-dropdown-select-list';
 
 import '@ethersproject/shims';
 import {utils} from 'ethers';
 
+import FaceIdLogo from '../assets/faceid-logo.png';
+
 // import {Enclave, UserOperation} from '../lib';
 
 import {AppContext} from '../context/AppContext';
+import {Colors, Fonts} from './style';
+import {tokens} from '../chain';
+
+const ESTIMATE_FEE = 0.0000194;
 
 const Send = () => {
   const {displayData} = useContext(AppContext);
@@ -26,8 +33,8 @@ const Send = () => {
     '0x81841c4648E17Db0F4Dc7e47195D19B19BA47a66',
   );
 
-  const [selectedGasToken, setSelectedGasToken] = useState<string>('eth');
-  const [selectedTransferToken, setSelectedTransferToken] = useState('');
+  const [selectedGasToken, setSelectedGasToken] = useState(0);
+  const [selectedTransferToken, setSelectedTransferToken] = useState(tokens[0]);
 
   async function onSend() {
     // if (utils.isAddress(address) === false) {
@@ -95,182 +102,232 @@ const Send = () => {
   return (
     <View
       style={{
-        backgroundColor: '#130c33',
+        backgroundColor: Colors.dark.background,
         height: '100%',
         display: 'flex',
         justifyContent: 'flex-start',
-        paddingTop: 25,
+        paddingTop: '10%',
         alignItems: 'center',
       }}>
-      {/* <View style={{position: 'relative'}}>
-        <Image source={money} />
-      </View> */}
+      <Text
+        style={{
+          textAlign: 'center',
+          fontFamily: Fonts.bold,
+          fontSize: 32,
+          color: Colors.dark.text,
+          marginBottom: '10%',
+        }}>
+        Send Funds
+      </Text>
+
       <View
         style={{
-          padding: 15,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          width: '90%',
+          margin: 15,
+          width: '80%',
         }}>
-        <TextInput
+        <Text style={styles.labelText}>Recipient:</Text>
+
+        <View
           style={{
-            borderRadius: 10,
-            marginLeft: 5,
-            borderWidth: 3,
-            borderColor: 'silver',
-            color: 'silver',
-            width: '100%',
-            paddingVertical: 10,
-            paddingHorizontal: 10,
-            textAlign: 'right',
-            fontFamily: 'AppleSDGothicNeo-Bold',
-          }}
-          onChangeText={setAddress}
-          value={String(address)}
-          placeholder="Recipient Address"
-          placeholderTextColor={'silver'}
-        />
-      </View>
-      <View
-        style={{
-          padding: 15,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          position: 'relative',
-          justifyContent: 'space-between',
-          width: '90%',
-        }}>
-        <TextInput
-          style={{
-            borderRadius: 10,
-            marginLeft: 5,
-            borderWidth: 3,
-            borderColor: 'silver',
-            width: 200,
-            paddingVertical: 10,
-            paddingHorizontal: 10,
-            textAlign: 'right',
-            color: 'silver',
-          }}
-          onChangeText={e => {
-            if (e.endsWith('.') || e.endsWith('0')) {
-              console.log(e);
-              return setAmount(e);
-            }
-            if (isNaN(parseFloat(e)) || e.length === 0) {
-              console.log(e);
-              return setAmount('0');
-            } else {
-              setAmount(parseFloat(e).toString());
-            }
-          }}
-          value={String(amount)}
-          placeholder="Amount"
-          keyboardType="numeric"
-        />
-        <View style={{marginLeft: 10}}>
-          {/* <SelectList
-            setSelected={(val: any) => setSelectedTransferToken(val)}
-            data={displayData.tokens.map((i: any, index: number) => ({
-              key: index,
-              value: i.name,
-            }))}
-            save="value"
-            defaultOption={
-              displayData.tokens.map((i: any, index: number) => ({
-                key: index,
-                value: i.name,
-              }))[0]
-            }
-            dropdownTextStyles={{color: 'silver'}}
-            inputStyles={{color: 'silver'}}
-          /> */}
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <TextInput
+            style={styles.input}
+            onChangeText={setAddress}
+            value={String(address)}
+            placeholder="Recipient Address"
+            placeholderTextColor={'white'}
+          />
         </View>
       </View>
+
       <View
         style={{
-          zIndex: 20,
+          margin: 15,
+          width: '80%',
+        }}>
+        <Text style={styles.labelText}>Amount:</Text>
+
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <TextInput
+            style={styles.input}
+            onChangeText={e => {
+              if (e.endsWith('.') || e.endsWith('0')) {
+                return setAmount(e);
+              } else if (isNaN(parseFloat(e)) || e.length === 0) {
+                return setAmount('0');
+              } else {
+                setAmount(parseFloat(e).toString());
+              }
+            }}
+            value={String(amount)}
+            placeholder="Amount"
+            keyboardType="numeric"
+            placeholderTextColor={'white'}
+          />
+          <SelectList
+            setSelected={(val: any) => setSelectedTransferToken(val)}
+            data={tokens.map(({symbol}, index: number) => ({
+              key: index,
+              value: symbol,
+            }))}
+            save="value"
+            defaultOption={{
+              key: 0,
+              value: tokens[0].symbol,
+            }}
+            fontFamily={Fonts.bold}
+            dropdownTextStyles={{color: 'white'}}
+            dropdownStyles={{
+              width: 75,
+              backgroundColor: Colors.dark.accent,
+              position: 'absolute',
+              transform: [{translateY: 35}],
+              borderRadius: 5,
+              zIndex: 100,
+            }}
+            search={false}
+            arrowicon={<View />}
+            inputStyles={{color: 'white', marginLeft: 5}}
+            boxStyles={{
+              borderRadius: 5,
+              backgroundColor: Colors.dark.accent,
+              width: 75,
+            }}
+          />
+        </View>
+      </View>
+
+      <View
+        style={{
+          height: '15%',
+        }}
+      />
+
+      <View
+        style={{
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'center',
-          maxHeight: '80%',
-          maxWidth: '80%',
-          position: 'relative',
+          justifyContent: 'space-between',
+          width: '80%',
         }}>
-        <ScrollView
+        <Text style={{...styles.labelText, flex: 1}}>Fee:</Text>
+
+        <View
           style={{
-            backgroundColor: 'rgba(66, 45, 55, 0.6)',
-            paddingHorizontal: 10,
-            overflow: 'hidden',
-            borderRadius: 10,
-            height: '50%',
-            width: '30%',
-            paddingVertical: 2,
-            minHeight: '35%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          {/* {displayData.gasTokens.map((item: any, i: number) => {
-            return (
-              <TouchableOpacity
-                key={i}
-                onPress={() => setSelectedGasToken(item.name)}>
-                <View
-                  style={{
-                    backgroundColor:
-                      selectedGasToken === item.name
-                        ? 'rgba(66, 45, 55, 1)'
-                        : 'transparent',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginBottom: 5,
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingVertical: 5,
-                    paddingHorizontal: 2,
-                    borderRadius: 10,
-                  }}>
-                  <Image
-                    style={{width: 25, height: 25}}
-                    source={images[item.name]}
-                  />
-                  <Text
-                    style={{
-                      color: 'silver',
-                    }}>
-                    {item?.name.toUpperCase()}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })} */}
-        </ScrollView>
-        <Text
-          style={{color: 'silver', marginLeft: 15, maxWidth: '50%'}}
-          lineBreakMode="head">
-          Choose your gas token to proceed
-        </Text>
-      </View>
-      <View>
-        <TouchableOpacity onPress={onSend}>
           <Text
             style={{
-              backgroundColor: 'silver',
-              color: 'black',
-              padding: 10,
-              paddingHorizontal: 15,
-              borderRadius: 15,
-              overflow: 'hidden',
-              fontWeight: 'bold',
+              color: 'white',
+              fontSize: 20,
+              fontFamily: Fonts.bold,
+              marginRight: 20,
             }}>
-            SEND
+            {ESTIMATE_FEE * tokens[selectedGasToken].priceEth}
           </Text>
-        </TouchableOpacity>
+
+          <SelectList
+            setSelected={(val: any) => setSelectedGasToken(val)}
+            data={tokens.map(({symbol}, index: number) => ({
+              key: index,
+              value: symbol,
+            }))}
+            save="key"
+            defaultOption={{
+              key: 0,
+              value: tokens[0].symbol,
+            }}
+            dropdownTextStyles={{color: 'white'}}
+            dropdownStyles={{
+              width: 75,
+              backgroundColor: Colors.dark.accent,
+              position: 'absolute',
+              transform: [{translateY: 35}],
+              borderRadius: 5,
+              zIndex: 100,
+            }}
+            search={false}
+            fontFamily={Fonts.bold}
+            arrowicon={<View />}
+            inputStyles={{color: 'white', marginLeft: 5}}
+            boxStyles={{
+              borderRadius: 5,
+              backgroundColor: Colors.dark.accent,
+              width: 75,
+              zIndex: 0,
+              borderColor: 'transparent',
+            }}
+          />
+        </View>
       </View>
+
+      <TouchableOpacity onPress={onSend}>
+        <View
+          style={{
+            marginTop: 30,
+            backgroundColor: 'white',
+            opacity: 0.8,
+            borderRadius: 10,
+            paddingHorizontal: 5,
+            paddingVertical: 5,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <Image
+            source={FaceIdLogo}
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 10,
+            }}
+          />
+          <Text
+            style={{
+              fontSize: 24,
+              fontFamily: Fonts.bold,
+              color: 'black',
+              paddingHorizontal: 10,
+            }}>
+            Send
+          </Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  labelText: {
+    color: Colors.dark.text,
+    fontSize: 24,
+    fontFamily: Fonts.regular,
+    marginBottom: 5,
+  },
+  input: {
+    borderRadius: 5,
+    borderWidth: 1,
+    paddingVertical: 13,
+    paddingHorizontal: 10,
+    marginRight: 20,
+    textAlign: 'right',
+    borderColor: 'white',
+    color: 'white',
+    flex: 1,
+  },
+});
 
 export default Send;

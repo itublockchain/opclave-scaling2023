@@ -2,9 +2,11 @@
 import React, {useContext} from 'react';
 import {Alert, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import profile from '../assets/profile.png';
+import {tokens} from '../chain';
 import {AppContext} from '../context/AppContext';
-import { Colors } from './style';
+import {Colors, Fonts} from './style';
+
+import profile from '../assets/profile.png';
 
 const Wallet = ({navigation}: {navigation: any}) => {
   const {displayData} = useContext(AppContext);
@@ -24,12 +26,13 @@ const Wallet = ({navigation}: {navigation: any}) => {
       <Text
         style={{
           textAlign: 'center',
-          color: 'pink',
-          fontSize: 14,
-          borderRadius: 10,
+          fontSize: 16,
+          fontFamily: Fonts.regular,
+          borderRadius: 5,
           overflow: 'hidden',
           borderWidth: 2,
-          borderColor: 'pink',
+          borderColor: Colors.dark.text,
+          color: Colors.dark.text,
           padding: 5,
           paddingHorizontal: 15,
         }}>
@@ -42,10 +45,7 @@ const Wallet = ({navigation}: {navigation: any}) => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Text style={styles.amountInput}>{displayData.balance}</Text>
-        <Text style={{color: 'white', fontFamily: 'AppleSDGothicNeo-Bold'}}>
-          ETH
-        </Text>
+        <Text style={styles.amountInput}>{displayData.balance} ETH</Text>
       </View>
       <View
         style={{
@@ -54,110 +54,132 @@ const Wallet = ({navigation}: {navigation: any}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('Send')}>
-          <Text style={styles.bigText}>Send</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button2}
-          onPress={() => navigation.navigate('Swap')}>
-          <Text style={styles.bigText}>Swap</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button3}
-          onPress={() => Alert.alert('Not available yet!')}>
-          <Text style={styles.bigText}>Browser</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button4}
-          onPress={() => Alert.alert('Not available yet!')}>
-          <Text style={styles.bigText}>Guardians</Text>
-        </TouchableOpacity>
+        <WalletButton text="Send" onPress={() => navigation.navigate('Send')} />
+        <WalletButton text="Swap" onPress={() => navigation.navigate('Swap')} />
       </View>
 
       <View
         style={{
-          height: '40%',
-          width: '70%',
-          marginTop: 35,
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}>
-        {/* <ScrollView
-          style={{
-            backgroundColor: 'rgba(66, 45, 55, 0.6)',
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            overflow: 'hidden',
-            borderRadius: 10,
-          }}>
-          {displayData.tokens.map(
-            (item: {name: string; amount: number}, i: number) => {
-              return (
-                <View
-                  key={i}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginVertical: 10,
-                    borderBottomColor: 'rgba(213, 185, 199, 0.33)',
-                    borderBottomWidth: 1,
-                    paddingBottom: 7,
-                  }}>
-                  <View
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexDirection: 'row',
-                    }}>
-                    <Image
-                      source={images[item.name]}
-                      style={{width: 25, height: 25, marginRight: 5}}
-                    />
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        color: 'silver',
-                        fontFamily: 'AppleSDGothicNeo-Bold',
-                      }}>
-                      {item.name.toUpperCase()}
-                    </Text>
-                  </View>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      color: 'silver',
-                      fontFamily: 'AppleSDGothicNeo-Bold',
-                    }}>
-                    {item.amount}
-                  </Text>
-                </View>
-              );
-            },
-          )}
-        </ScrollView> */}
+        <WalletButton
+          text="Browser"
+          onPress={() => Alert.alert('Not available yet!')}
+        />
+        <WalletButton
+          text="Guardians"
+          onPress={() => navigation.navigate('Guardians')}
+        />
       </View>
+
+      <Balances style={{marginTop: 20, width: '70%', height: '40%'}} />
     </View>
   );
 };
+
+const WalletButton = (props: {
+  text: string;
+  onPress: () => void;
+  style?: any;
+}) => {
+  return (
+    <TouchableOpacity
+      style={{
+        ...styles.button,
+        ...props.style,
+      }}
+      onPress={props.onPress}>
+      <Text style={styles.buttonText}>{props.text}</Text>
+    </TouchableOpacity>
+  );
+};
+
+const Balances = (props: {style?: any}) => {
+  return (
+    <View style={{...props.style}}>
+      <Text
+        style={{
+          textAlign: 'center',
+          fontSize: 24,
+          color: 'white',
+          fontFamily: Fonts.regular,
+          marginBottom: 10,
+        }}>
+        Your Balances
+      </Text>
+
+      <ScrollView
+        style={{
+          backgroundColor: Colors.dark.accent,
+          paddingHorizontal: 10,
+          paddingVertical: 5,
+          overflow: 'hidden',
+          borderRadius: 10,
+        }}>
+        {tokens.map(({name, logo}, i: number) => {
+          return (
+            <View
+              key={i}
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignContent: 'center',
+                marginVertical: 10,
+                paddingBottom: 7,
+              }}>
+              <View
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                }}>
+                <Image
+                  source={logo}
+                  style={{
+                    width: 30,
+                    height: 30,
+                    marginRight: 10,
+                    shadowColor: 'black',
+                    shadowOpacity: 0.1,
+                    shadowRadius: 1,
+                  }}
+                />
+                <Text
+                  style={{
+                    fontSize: 24,
+                    color: 'white',
+                    fontFamily: Fonts.regular,
+                  }}>
+                  {name}
+                </Text>
+              </View>
+              <Text
+                style={{
+                  fontSize: 24,
+                  color: 'white',
+                  fontFamily: Fonts.regular,
+                }}>
+                0.0
+              </Text>
+            </View>
+          );
+        })}
+      </ScrollView>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.dark.background,
-  },
-  input: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    width: '70%',
-    textAlign: 'left',
-    overflow: 'hidden',
-    borderRadius: 15,
-    color: 'white',
-    borderColor: 'white',
-    borderWidth: 5,
   },
   amountInput: {
     marginTop: 20,
@@ -175,47 +197,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     marginTop: 15,
-    backgroundColor: '#CB2477',
-    color: 'white',
+    backgroundColor: Colors.dark.accent,
     overflow: 'hidden',
-    borderRadius: 25,
-    shadowColor: 'white',
+    borderRadius: 5,
     marginHorizontal: 5,
+    width: 120,
   },
-  button2: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    marginTop: 15,
-    backgroundColor: '#5457EB',
+  buttonText: {
     color: 'white',
-    overflow: 'hidden',
-    borderRadius: 25,
-    shadowColor: 'white',
-    marginHorizontal: 5,
+    fontSize: 16,
+    fontFamily: Fonts.bold,
+    textAlign: 'center',
   },
-  button3: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    marginTop: 15,
-    backgroundColor: '#EF895D',
+  bigText: {
     color: 'white',
-    overflow: 'hidden',
-    borderRadius: 25,
-    shadowColor: 'white',
-    marginHorizontal: 5,
+    fontSize: 16,
+    fontFamily: Fonts.bold,
+    textAlign: 'center',
   },
-  button4: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    marginTop: 15,
-    backgroundColor: '#22CBC7',
-    color: 'white',
-    overflow: 'hidden',
-    borderRadius: 25,
-    shadowColor: 'white',
-    marginHorizontal: 5,
-  },
-  bigText: {color: 'white', fontSize: 14, fontFamily: 'AppleSDGothicNeo-Bold'},
 });
 
 export default Wallet;

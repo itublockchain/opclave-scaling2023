@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, View} from 'react-native';
 import Landing from '../screens/Landing';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
@@ -29,7 +29,7 @@ const NavMain = () => {
             <Stack.Screen
               name="Send"
               component={Send}
-              options={{header: () => <SendButton />}}
+              options={{header: () => <View />}}
             />
             <Stack.Screen
               name="Swap"
