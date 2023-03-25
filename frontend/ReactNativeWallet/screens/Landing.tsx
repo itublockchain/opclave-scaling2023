@@ -3,27 +3,71 @@ import {Alert, Image, StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import Logo from '../assets/logo.png';
+import FaceIdLogo from '../assets/faceid-logo.png';
+
 import {Colors, Fonts} from './style';
 
 const Landing = ({navigation}: {navigation: any}) => {
   return (
     <View style={styles.container}>
       <View style={styles.upperSection}>
-        <Image source={Logo} style={{ width: 250, height: 250, marginBottom: 0 }} />
+        <View>
+          <Image
+            source={Logo}
+            style={{width: 120, height: 120, marginBottom: 10}}
+          />
+          <Text
+            style={{
+              textAlign: 'center',
+              fontFamily: Fonts.bold,
+              color: Colors.dark.text,
+              fontSize: 24,
+            }}>
+            OPCLAVE
+          </Text>
+        </View>
       </View>
       <View style={styles.middleSection}>
-        <Text style={styles.bigText}>Set up your wallet</Text>
+        <Text style={styles.bigText}>Let's set up your wallet</Text>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Menu');
           }}>
-          <Text style={styles.button}>OPEN</Text>
+          <View
+            style={{
+              marginTop: 10,
+              backgroundColor: 'white',
+              opacity: 0.8,
+              borderRadius: 10,
+              paddingHorizontal: 5,
+              paddingVertical: 5,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={FaceIdLogo}
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 10,
+              }}
+            />
+            <Text style={{
+              fontSize: 24,
+              fontFamily: Fonts.bold,
+              color: 'black',
+              paddingHorizontal: 10
+            }}>Continue</Text>
+          </View>
         </TouchableOpacity>
       </View>
       <View style={styles.lowerSection}>
         <TouchableOpacity onPress={() => Alert.alert('Not available yet!')}>
           <Text style={styles.smallThin}>Already have a wallet?</Text>
-          <Text style={styles.smallRegular}>Recover wallet using Guardians</Text>
+          <Text style={styles.smallRegular}>
+            Recover wallet using Guardians
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -40,7 +84,6 @@ const styles = StyleSheet.create({
   middleSection: {
     flex: 2,
     alignItems: 'center',
-    // justifyContent: 'flex-start',
   },
   lowerSection: {
     flex: 1,
@@ -59,8 +102,8 @@ const styles = StyleSheet.create({
   },
   bigText: {
     color: Colors.dark.text,
-    fontSize: 24,
-    fontFamily: Fonts.bold,
+    fontSize: 32,
+    fontFamily: Fonts.regular,
   },
   smallThin: {
     textAlign: 'center',
@@ -73,7 +116,7 @@ const styles = StyleSheet.create({
     color: Colors.dark.text,
     fontFamily: Fonts.regular,
     fontSize: 16,
-  }
+  },
 });
 
 export default Landing;
