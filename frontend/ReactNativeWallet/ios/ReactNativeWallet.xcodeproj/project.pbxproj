@@ -531,7 +531,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 858J593HG3;
+				DEVELOPMENT_TEAM = DVJ32KV846;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = ReactNativeWallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -545,7 +545,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.ReactNativeWallet2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itu.blockchain.ReactNative;
 				PRODUCT_NAME = ReactNativeWallet;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ReactNativeWallet-Bridging-Header.h";
@@ -565,7 +565,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 858J593HG3;
+				DEVELOPMENT_TEAM = DVJ32KV846;
 				INFOPLIST_FILE = ReactNativeWallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -578,7 +578,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.ReactNativeWallet2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.itu.blockchain.ReactNative;
 				PRODUCT_NAME = ReactNativeWallet;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ReactNativeWallet-Bridging-Header.h";

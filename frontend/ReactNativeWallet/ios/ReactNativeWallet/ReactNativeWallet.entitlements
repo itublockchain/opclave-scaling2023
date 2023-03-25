@@ -4,7 +4,7 @@
 <dict>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)org.reactjs.native.example.ReactNativeWallet2</string>
+		<string>$(AppIdentifierPrefix)com.itu.blockchain.ReactNative</string>
 	</array>
 </dict>
 </plist>
