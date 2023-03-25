@@ -34,5 +34,23 @@ RCT_EXTERN_METHOD(signMessage:(NSString)alias
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+
+- (id)init
+{
+  if (self = [super init]) {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(cameraChanged:)
+                                             name:@"AVCaptureDeviceDidStartRunn ingNotification"
+                                             object:nil];
+  }
+  return self;
+}
+
+// Please add this one
++ (BOOL)requiresMainQueueSetup
+{
+  return NO;
+}
+
 @end
 

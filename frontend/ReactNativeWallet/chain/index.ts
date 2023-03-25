@@ -15,7 +15,7 @@ export const deployments = {
   paymaster: '0x0bb7B5e7E3B7Da3D45fEa583E467D1c4944D7A1f',
   opToken: '0xBB3E66eE258ef9Cc7b4e5d84F765071658A5215D',
   entryPoint: '0x7C2641de9b8ECED9C3796B0bf99Ead1BeD5407A5',
-};
+} as const;
 
 export const tokens: Token[] = [
   {

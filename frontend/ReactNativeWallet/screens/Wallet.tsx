@@ -71,7 +71,7 @@ const Wallet = ({navigation}: {navigation: any}) => {
         />
         <WalletButton
           text="Guardians"
-          onPress={() => navigation.navigate('Guardians')}
+          onPress={() => Alert.alert('Not available yet!')}
         />
       </View>
 

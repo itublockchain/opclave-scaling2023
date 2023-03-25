@@ -14,14 +14,13 @@ import {SelectList} from 'react-native-dropdown-select-list';
 
 import '@ethersproject/shims';
 import {utils} from 'ethers';
+import {Enclave, UserOperation} from '../lib';
 
 import FaceIdLogo from '../assets/faceid-logo.png';
 
-// import {Enclave, UserOperation} from '../lib';
-
 import {AppContext} from '../context/AppContext';
 import {Colors, Fonts} from './style';
-import {tokens} from '../chain';
+import {deployments, tokens} from '../chain';
 
 const ESTIMATE_FEE = 0.0000194;
 
@@ -37,66 +36,63 @@ const Send = () => {
   const [selectedTransferToken, setSelectedTransferToken] = useState(tokens[0]);
 
   async function onSend() {
-    // if (utils.isAddress(address) === false) {
-    //   console.log('Invalid address');
-    //   return;
-    // }
-    // const ERC20_IFACE = new utils.Interface([
-    //   'function approve(address spender, uint256 amount) public returns (bool)',
-    //   'function transfer(address to, uint256 amount) public returns (bool)',
-    // ]);
-    // const GOERLI_ADDRESSES = {
-    //   account: '0x5154de6CC9bb544a1A12079018F628eF63456574',
-    //   paymaster: '0x0bb7B5e7E3B7Da3D45fEa583E467D1c4944D7A1f',
-    //   mockToken: '0xBB3E66eE258ef9Cc7b4e5d84F765071658A5215D',
-    //   entryPoint: '0x7C2641de9b8ECED9C3796B0bf99Ead1BeD5407A5',
-    // };
-    // let nonce = await UserOperation.getNonce(
-    //   '0x5154de6CC9bb544a1A12079018F628eF63456574',
-    // );
-    // const approveData = ERC20_IFACE.encodeFunctionData('approve', [
-    //   GOERLI_ADDRESSES.paymaster,
-    //   '10000000000000000000000000',
-    // ]);
-    // const transferData = ERC20_IFACE.encodeFunctionData('transfer', [
-    //   address,
-    //   String(amount),
-    // ]);
-    // const createOperation = async (
-    //   data: UserOperation.TxData[],
-    //   params?: Partial<UserOperation.Params>,
-    // ): Promise<UserOperation.Operation> => {
-    //   const opParams = await UserOperation.fillParamsBatch(
-    //     data,
-    //     params,
-    //   );
-    //   nonce += 1;
-    //   const encodedOp = await UserOperation.encode(opParams);
-    //   const signature = await Enclave.signMessage(encodedOp);
-    //   return await UserOperation.create(opParams, signature);
-    // };
-    // const transferOp = await createOperation(
-    //   [{dest: GOERLI_ADDRESSES.mockToken, data: transferData}],
-    //   {
-    //     sender: GOERLI_ADDRESSES.account,
-    //     entryPoint: GOERLI_ADDRESSES.entryPoint,
-    //     paymaster: GOERLI_ADDRESSES.paymaster,
-    //     chainId: 420,
-    //     nonce,
-    //   },
-    // );
-    // try {
-    //   const bundlerResponse: {jobId: string} = await axios
-    //     .post('http://localhost:3001/broadcast-txs', {
-    //       txs: [transferOp],
-    //     })
-    //     .then(resp => resp.data);
-    //   console.log(bundlerResponse);
-    //   // Handle Success
-    // } catch (e) {
-    //   console.error(e);
-    //   // Handle Error
-    // }
+    if (utils.isAddress(address) === false) {
+      console.log('Invalid address');
+      return;
+    }
+
+    const ERC20_IFACE = new utils.Interface([
+      'function approve(address spender, uint256 amount) public returns (bool)',
+      'function transfer(address to, uint256 amount) public returns (bool)',
+    ]);
+
+    let nonce = await UserOperation.getNonce(deployments.account);
+
+    // We are approving more than we want in reality
+    const approveData = ERC20_IFACE.encodeFunctionData('approve', [
+      deployments.paymaster,
+      utils.parseEther(String(amount)),
+    ]);
+
+    const transferData = ERC20_IFACE.encodeFunctionData('transfer', [
+      address,
+      String(amount),
+    ]);
+
+    const createOperation = async (
+      data: UserOperation.TxData[],
+      params?: Partial<UserOperation.Params>,
+    ): Promise<UserOperation.Operation> => {
+      const opParams = await UserOperation.fillParamsBatch(data, params);
+      nonce += 1;
+      const encodedOp = await UserOperation.encode(opParams);
+      const signature = await Enclave.signMessage(encodedOp);
+      return await UserOperation.create(opParams, signature);
+    };
+
+    const transferOp = await createOperation(
+      [{dest: deployments.opToken, data: transferData}],
+      {
+        sender: deployments.account,
+        entryPoint: deployments.entryPoint,
+        paymaster: deployments.paymaster,
+        chainId: 420,
+        nonce,
+      },
+    );
+
+    try {
+      const bundlerResponse: {jobId: string} = await axios
+        .post('http://localhost:3001/broadcast-txs', {
+          txs: [transferOp],
+        })
+        .then(resp => resp.data);
+      console.log(bundlerResponse);
+      // Handle Success
+    } catch (e) {
+      console.error(e);
+      // Handle Error
+    }
   }
 
   return (
@@ -115,7 +111,7 @@ const Send = () => {
           fontFamily: Fonts.bold,
           fontSize: 32,
           color: Colors.dark.text,
-          marginBottom: '10%',
+          marginBottom: '15%',
         }}>
         Send Funds
       </Text>
@@ -194,12 +190,14 @@ const Send = () => {
               transform: [{translateY: 35}],
               borderRadius: 5,
               zIndex: 100,
+              borderColor: 'transparent',
             }}
             search={false}
             arrowicon={<View />}
             inputStyles={{color: 'white', marginLeft: 5}}
             boxStyles={{
               borderRadius: 5,
+              borderColor: 'transparent',
               backgroundColor: Colors.dark.accent,
               width: 75,
             }}
@@ -258,6 +256,7 @@ const Send = () => {
               transform: [{translateY: 35}],
               borderRadius: 5,
               zIndex: 100,
+              borderColor: 'transparent',
             }}
             search={false}
             fontFamily={Fonts.bold}

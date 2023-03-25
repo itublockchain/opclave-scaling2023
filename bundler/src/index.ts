@@ -52,6 +52,8 @@ app.post("/broadcast-txs", async (req, res) => {
     const entryPointAddress = "0x7C2641de9b8ECED9C3796B0bf99Ead1BeD5407A5";
     const entryPoint = new Contract(entryPointAddress, entryPointInterface, signer);
 
+    console.log("Handling operations", userOps);
+
     const handleTx = await entryPoint.handleOps(userOps, signer.address);
     const randomId = Buffer.from(ethers.utils.randomBytes(10)).toString("hex");
 
