@@ -1,7 +1,7 @@
 export const Colors = {
     dark: {
         background: "#130c33",
-        accent: "#B3005E",
+        accent: "#8A6299",
         text: "#FFFFFF",
         emphasis: "#FF0303"
     },
