@@ -1,38 +1,103 @@
 import React from 'react';
-import {Alert, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import Logo from '../assets/logo.png';
 import FaceIdLogo from '../assets/faceid-logo.png';
 
 import {Colors, Fonts} from './style';
+import {getAccount, setAccount} from '../chain/accountStore';
+import {UserOperation} from '../lib';
+import axios from 'axios';
 
-const Landing = ({navigation}: {navigation: any}) => {
+const LandingState = {
+  Welcome: 0,
+  Deployment: 1,
+} as const;
+
+type Navigation = {
+  navigate: (arg0: string) => void;
+};
+
+type WelcomeProps = {
+  navigation: Navigation;
+  setLandingState: React.Dispatch<React.SetStateAction<number>>;
+};
+
+type LandingProps = {
+  navigation: Navigation;
+};
+
+async function onLandingPress(
+  navigation: Navigation,
+  setTransferState: React.Dispatch<React.SetStateAction<number>>,
+) {
+  const account = await getAccount();
+
+  if (account != null) {
+    navigation.navigate('Menu');
+    return;
+  }
+
+  setTransferState(LandingState.Deployment);
+
+  try {
+    // const deployOp = {} as UserOperation.Operation;
+    // const bundlerResponse: {jobId: string} = await axios
+    //   .post('http://localhost:3000/broadcast-txs', {
+    //     txs: [deployOp],
+    //   })
+    //   .then(resp => resp.data);
+
+    // console.log(bundlerResponse);
+    // await setAccount(deployOp.sender);
+
+    // Sleep 1 second
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    navigation.navigate('Menu');
+  } catch (e) {
+    console.error(e);
+    Alert.alert('Error', 'Failed to deploy wallet');
+  }
+}
+
+const Deployment = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.upperSection}>
-        <View>
-          <Image
-            source={Logo}
-            style={{width: 120, height: 120, marginBottom: 10}}
-          />
-          <Text
-            style={{
-              textAlign: 'center',
-              fontFamily: Fonts.bold,
-              color: Colors.dark.text,
-              fontSize: 24,
-            }}>
-            OPCLAVE
-          </Text>
-        </View>
+    <>
+      <View
+        style={{
+          backgroundColor: Colors.dark.background,
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Text style={{...styles.bigBold, paddingBottom: 15}}>
+          Deploying your account
+        </Text>
+
+        <ActivityIndicator color="#e6523e" size="large" />
       </View>
+    </>
+  );
+};
+
+const Welcome = (props: WelcomeProps) => {
+  return (
+    <>
       <View style={styles.middleSection}>
-        <Text style={styles.bigText}>Let's set up your wallet</Text>
+        <Text style={styles.bigRegular}>Let's set up your wallet</Text>
         <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Menu');
-          }}>
+          onPress={() =>
+            onLandingPress(props.navigation, props.setLandingState)
+          }>
           <View
             style={{
               marginTop: 10,
@@ -53,15 +118,19 @@ const Landing = ({navigation}: {navigation: any}) => {
                 borderRadius: 10,
               }}
             />
-            <Text style={{
-              fontSize: 24,
-              fontFamily: Fonts.bold,
-              color: 'black',
-              paddingHorizontal: 10
-            }}>Continue</Text>
+            <Text
+              style={{
+                fontSize: 24,
+                fontFamily: Fonts.bold,
+                color: 'black',
+                paddingHorizontal: 10,
+              }}>
+              Continue
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
+
       <View style={styles.lowerSection}>
         <TouchableOpacity onPress={() => Alert.alert('Not available yet!')}>
           <Text style={styles.smallThin}>Already have a wallet?</Text>
@@ -70,6 +139,40 @@ const Landing = ({navigation}: {navigation: any}) => {
           </Text>
         </TouchableOpacity>
       </View>
+    </>
+  );
+};
+
+const Landing = (props: LandingProps) => {
+  const [landingState, setLandingState] = React.useState(0);
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.upperSection}>
+        <View>
+          <Image
+            source={Logo}
+            style={{width: 120, height: 120, marginBottom: 10}}
+          />
+          <Text
+            style={{
+              textAlign: 'center',
+              fontFamily: Fonts.bold,
+              color: Colors.dark.text,
+              fontSize: 24,
+            }}>
+            OPCLAVE
+          </Text>
+        </View>
+      </View>
+
+      {landingState === 0 && (
+        <Welcome
+          navigation={props.navigation}
+          setLandingState={setLandingState}
+        />
+      )}
+      {landingState === 1 && <Deployment />}
     </View>
   );
 };
@@ -100,10 +203,20 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     shadowColor: 'white',
   },
-  bigText: {
+  bigBold: {
+    color: Colors.dark.text,
+    fontSize: 24,
+    fontFamily: Fonts.bold,
+  },
+  bigRegular: {
     color: Colors.dark.text,
     fontSize: 32,
     fontFamily: Fonts.regular,
+  },
+  bigThin: {
+    color: Colors.dark.text,
+    fontSize: 24,
+    fontFamily: Fonts.thin,
   },
   smallThin: {
     textAlign: 'center',

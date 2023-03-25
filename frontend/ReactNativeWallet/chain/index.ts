@@ -1,4 +1,4 @@
-type Token = {
+export type Token = {
   name: string;
   symbol: string;
   decimals: number;
@@ -19,14 +19,14 @@ export const deployments = {
 
 export const tokens: Token[] = [
   {
-    name: 'Ethereum',
+    name: 'Ether',
     symbol: 'ETH',
     logo: EthLogo,
     decimals: 18,
     priceEth: 1
   },
   {
-    name: 'Optimism',
+    name: 'OP Token',
     symbol: 'OP',
     logo: OpLogo,
     decimals: 18,

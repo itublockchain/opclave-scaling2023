@@ -11,6 +11,17 @@ type AppContextProps = {
       balance: string;
     }>
   >;
+
+  dummyData: {
+    ethBalance: number;
+    opBalance: number;
+  };
+  setDummyData: React.Dispatch<
+    React.SetStateAction<{
+      ethBalance: number;
+      opBalance: number;
+    }>
+  >;
 };
 
 export const AppContext = React.createContext({} as AppContextProps);
@@ -21,7 +32,17 @@ export function AppContextProvider(props: any) {
     balance: '0.00',
   });
 
-  const context: AppContextProps = {displayData, setDisplayData};
+  const [dummyData, setDummyData] = React.useState({
+    ethBalance: 5.328,
+    opBalance: 57.4,
+  });
+
+  const context: AppContextProps = {
+    displayData,
+    setDisplayData,
+    dummyData,
+    setDummyData,
+  };
 
   return (
     <AppContext.Provider value={context}>{props.children}</AppContext.Provider>

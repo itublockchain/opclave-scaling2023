@@ -7,11 +7,9 @@ import {NavigationContainer} from '@react-navigation/native';
 
 import Applications from '../screens/Application';
 import Wallet from '../screens/Wallet';
-// import Send from '../screens/Send';
+import Send from '../screens/Send';
 
 import AppsButton from '../components/AppsButton';
-import SendButton from '../components/SendButton';
-import Send from '../screens/Send';
 
 const Stack = createNativeStackNavigator();
 

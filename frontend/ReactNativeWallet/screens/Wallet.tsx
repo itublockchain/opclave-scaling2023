@@ -9,7 +9,10 @@ import {Colors, Fonts} from './style';
 import profile from '../assets/profile.png';
 
 const Wallet = ({navigation}: {navigation: any}) => {
-  const {displayData} = useContext(AppContext);
+  const {displayData, dummyData} = useContext(AppContext);
+
+  // DEBUG
+  const balances = [dummyData.ethBalance, dummyData.opBalance];
 
   return (
     <View style={styles.container}>
@@ -45,7 +48,7 @@ const Wallet = ({navigation}: {navigation: any}) => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Text style={styles.amountInput}>{displayData.balance} ETH</Text>
+        <Text style={styles.amountInput}>{dummyData.ethBalance} ETH</Text>
       </View>
       <View
         style={{
@@ -54,8 +57,16 @@ const Wallet = ({navigation}: {navigation: any}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <WalletButton text="Send" onPress={() => navigation.navigate('Send')} />
-        <WalletButton text="Swap" onPress={() => navigation.navigate('Swap')} />
+        <WalletButton
+          logo={require('../assets/sent.png')}
+          text="Send"
+          onPress={() => navigation.navigate('Send')}
+        />
+        <WalletButton
+          logo={require('../assets/uni-logo-white.png')}
+          text="Swap"
+          onPress={() => navigation.navigate('Swap')}
+        />
       </View>
 
       <View
@@ -66,38 +77,63 @@ const Wallet = ({navigation}: {navigation: any}) => {
           alignItems: 'center',
         }}>
         <WalletButton
+          logo={require('../assets/browser.png')}
           text="Browser"
+          disabled={true}
           onPress={() => Alert.alert('Not available yet!')}
         />
         <WalletButton
+          logo={require('../assets/guard.png')}
           text="Guardians"
+          disabled={true}
           onPress={() => Alert.alert('Not available yet!')}
         />
       </View>
 
-      <Balances style={{marginTop: 20, width: '70%', height: '40%'}} />
+      <Balances
+        balances={balances}
+        style={{marginTop: 20, width: '70%', height: '40%'}}
+      />
     </View>
   );
 };
 
 const WalletButton = (props: {
   text: string;
+  logo: any;
   onPress: () => void;
   style?: any;
+  disabled?: boolean;
 }) => {
   return (
     <TouchableOpacity
       style={{
         ...styles.button,
         ...props.style,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        backgroundColor: props.disabled ? 'gray' : Colors.dark.accent,
       }}
       onPress={props.onPress}>
-      <Text style={styles.buttonText}>{props.text}</Text>
+      <Image
+        source={props.logo}
+        style={{width: 30, height: 30, marginRight: 2}}
+      />
+      <Text
+        style={{
+          ...styles.buttonText,
+          color: props.disabled ? 'black' : 'white',
+        }}>
+        {props.text}
+      </Text>
     </TouchableOpacity>
   );
 };
 
-const Balances = (props: {style?: any}) => {
+const Balances = (props: {balances: number[]; style?: any}) => {
   return (
     <View style={{...props.style}}>
       <Text
@@ -120,6 +156,8 @@ const Balances = (props: {style?: any}) => {
           borderRadius: 10,
         }}>
         {tokens.map(({name, logo}, i: number) => {
+          const balance = props.balances[i];
+
           return (
             <View
               key={i}
@@ -164,7 +202,7 @@ const Balances = (props: {style?: any}) => {
                   color: 'white',
                   fontFamily: Fonts.regular,
                 }}>
-                0.0
+                {String(balance)}
               </Text>
             </View>
           );
@@ -194,7 +232,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   button: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 5,
     paddingVertical: 10,
     marginTop: 15,
     backgroundColor: Colors.dark.accent,
