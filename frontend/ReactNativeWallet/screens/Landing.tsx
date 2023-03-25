@@ -62,8 +62,8 @@ async function onLandingPress(
     // Trigger the enclave
     await Enclave.getPublicKey();
 
-    // Sleep 1 second
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Sleep 5 second
+    await new Promise(resolve => setTimeout(resolve, 5000));
 
     navigation.navigate('Menu');
   } catch (e) {

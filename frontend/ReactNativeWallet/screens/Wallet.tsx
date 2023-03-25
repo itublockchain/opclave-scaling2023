@@ -48,7 +48,7 @@ const Wallet = ({navigation}: {navigation: any}) => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Text style={styles.amountInput}>{dummyData.ethBalance} ETH</Text>
+        <Text style={styles.amountInput}>{dummyData.ethBalance.toFixed(3)} ETH</Text>
       </View>
       <View
         style={{
@@ -202,7 +202,7 @@ const Balances = (props: {balances: number[]; style?: any}) => {
                   color: 'white',
                   fontFamily: Fonts.regular,
                 }}>
-                {String(balance)}
+                {balance.toFixed(3)}
               </Text>
             </View>
           );

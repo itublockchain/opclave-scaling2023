@@ -227,6 +227,10 @@ const PrepareTransfer = (props: {
       nonce += 1;
       const encodedOp = await UserOperation.encode(opParams);
       const signature = await Enclave.signMessage(encodedOp);
+
+      // Sleep 5 seconds to simulate the time it takes to send the transaction
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+
       return await UserOperation.create(opParams, signature);
     };
 
