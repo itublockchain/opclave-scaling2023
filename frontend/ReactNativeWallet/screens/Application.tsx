@@ -5,9 +5,9 @@ import {SelectList} from 'react-native-dropdown-select-list';
 
 import {AppContext} from '../context/AppContext';
 
-import UniLogo from "../assets/uni-logo.png";
-import AaveLogo from "../assets/aave-logo.png";
-import { Fonts } from './style';
+import UniLogo from '../assets/uni-logo.png';
+import AaveLogo from '../assets/aave-logo.png';
+import {Colors, Fonts} from './style';
 
 const Application = () => {
   const [selected, setSelected] = React.useState('');
@@ -26,8 +26,8 @@ const Application = () => {
         style={{
           fontSize: 20,
           textAlign: 'center',
-          color: 'white',
-          backgroundColor: '#AA336A',
+          color: Colors.dark.text,
+          backgroundColor: Colors.dark.background,
           paddingVertical: 5,
           borderRadius: 15,
           overflow: 'hidden',
