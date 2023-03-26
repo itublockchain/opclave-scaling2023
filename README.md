@@ -2,7 +2,7 @@
 
 <img style="width: 220px" align="right" src="https://raw.githubusercontent.com/itublockchain/NFT/main/logo-notext.png">
 
-OP-Stack improvement with ERC-4337 compatible account abstracted with Apple Enclave - Touch ID
+OP-Stack improvement with ERC-4337 compatible accounts that uses signatures abstracted with Apple Enclave - Touch ID
 
 [ETHGlobal Scaling 2023 Hackathon](https://ethglobal.com/events/scaling2023) project
 
