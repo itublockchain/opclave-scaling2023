@@ -6,6 +6,8 @@ OP-Stack improvement with ERC-4337 compatible accounts that uses signatures abst
 
 [ETHGlobal Scaling 2023 Hackathon](https://ethglobal.com/events/scaling2023) project
 
+Smart Contracts are in the opclave-contracts submodule.
+
 <br/>
 
 | Team Member                                     | Role            |
