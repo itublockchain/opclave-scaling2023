@@ -42,12 +42,6 @@ export async function deleteKeyPair(): Promise<void> {
 }
 
 export async function signMessage(data: string): Promise<string> {
-  try {
-    await getPublicKey();
-  } catch {
-    await generateKeyPair();
-  }
-
   const signatureBase64 = await EnclaveModule.signMessage(ALIAS, data);
   return Buffer.from(signatureBase64, 'base64').toString('hex');
 }
