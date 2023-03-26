@@ -3,7 +3,7 @@ make geth
 
 cd build/bin
 
-$ ./geth --datadir ../geth-test init genesis.json
+./geth --datadir ../geth-test init genesis.json
 
 geth account new --datadir ../geth-test
 
