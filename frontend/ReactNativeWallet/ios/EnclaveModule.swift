@@ -123,6 +123,7 @@ class EnclaveModule: NSObject {
       kSecClass as String             : kSecClassKey,
       kSecAttrKeyType as String       : kSecAttrKeyTypeEC,
       kSecAttrKeySizeInBits as String : 256,
+      kSecAttrTokenID as String       : kSecAttrTokenIDSecureEnclave,
       kSecPrivateKeyAttrs as String   : [
         kSecAttrIsPermanent as String     : true,
         kSecAttrApplicationTag as String  : tag,
